@@ -12,11 +12,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: Build Ubuntu-latest Container
+
+      - name: Build Ubuntu Container
         uses: ./.github/actions/container-build
         with:
-          image-name: ubuntu-latest
-          dockerfile: images/ubuntu-latest/Dockerfile
-          context: images/ubuntu-latest
+          image-name: ubuntu
+          dockerfile: images/ubuntu/Dockerfile
+          context: images/ubuntu
           github-token: ${{ secrets.GITHUB_TOKEN }}

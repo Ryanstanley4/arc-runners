@@ -1,18 +1,8 @@
-# Custom ARC Runners - Ubuntu (with Podman & Extended Tooling)
+# Custom ARC Runners
 
 ## Background
 
 The default GitHub ARC (Actions Runner Controller) Ubuntu runners are intentionally minimal — they provide only the core GitHub runner tooling and omit many common tools required for typical CI/CD jobs.
-
-This repo builds a custom image for ARC runners, adding:
-
-- **Podman** (as a drop-in Docker replacement — avoids Docker daemon dependency)
-- Additional useful tooling (curl, git, etc.)
-- A stable image base, so CI pipelines are consistent across updates
-
-By providing a fully pre-built image, ARC runners can start faster and avoid the overhead of installing tooling at runtime.
-
----
 
 ## The runners
 
@@ -27,6 +17,50 @@ template:
 ```
 or:
 ```sh
-#...
+helm upgrade --install "arc-runner-set" \
 --set template.spec.containers[0].image='ghcr.io/ryanstanley4/arc-runners/ubuntu:latest'
 ```
+
+---
+
+## Included Tools & Versions
+
+The Ubuntu image includes the following tools and versions (see `images/ubuntu/Dockerfile`):
+
+- **Base image:** Ubuntu 24.04
+- **GitHub Actions Runner:** v2.316.1
+- **Podman** (container runtime)
+- **Golang:** 1.22.4
+- **kubectl** (Kubernetes CLI)
+- **Helm** (Kubernetes package manager)
+- **curl, wget, git, unzip, jq, tar, gzip, lsb-release, build-essential, ca-certificates, software-properties-common, apt-transport-https, gnupg, libssl-dev**
+
+## Building the Image
+
+To build the Ubuntu runner image locally:
+
+```sh
+cd images/ubuntu
+podman build -t arc-runner-ubuntu:latest .
+# or use docker if preferred
+# docker build -t arc-runner-ubuntu:latest .
+```
+
+## Entrypoint & User
+
+- The image runs as a non-root user (`runner`).
+- The entrypoint is `/home/runner/run.sh` (ensure your deployment provides this script or overrides as needed).
+
+## Customization
+
+To add more tools or change versions, edit `images/ubuntu/Dockerfile` and rebuild the image.
+
+## Contributing
+
+Contributions are welcome! Please open issues or pull requests for improvements or additional tooling.
+
+---
+
+## License
+
+This project is licensed under the MIT License.

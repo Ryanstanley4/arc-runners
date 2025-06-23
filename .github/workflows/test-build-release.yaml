@@ -10,6 +10,9 @@ jobs:
   build-container:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
       - name: Build Ubuntu-latest Container
         uses: ./.github/actions/container-build
         with:

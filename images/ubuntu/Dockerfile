@@ -3,6 +3,7 @@ FROM ubuntu:24.04
 
 # Metadata
 LABEL maintainer="ryanstanley4"
+LABEL org.opencontainers.image.source = "https://github.com/Ryanstanley4/arc-runners"
 
 # Set environment variables for runner
 ENV RUNNER_VERSION=2.316.1

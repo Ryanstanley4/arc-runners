@@ -1,0 +1,40 @@
+name: Build and Push Container Image
+
+description: Build a container image and push to GitHub Packages using Podman
+
+inputs:
+  image-name:
+    description: 'Name of the image'
+    required: true
+  dockerfile:
+    description: 'Path to Dockerfile'
+    required: false
+    default: './Dockerfile'
+  context:
+    description: 'Build context'
+    required: false
+    default: '.'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Podman
+      uses: redhat-actions/podman-login@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build image with Podman
+      run: |
+        podman build -f ${{ inputs.dockerfile }} -t ghcr.io/${{ github.repository_owner }}/${{ inputs.image-name }}:latest ${{ inputs.context }}
+      shell: bash
+
+    - name: Push image with Podman
+      if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
+      run: |
+        podman push ghcr.io/${{ github.repository_owner }}/${{ inputs.image-name }}:latest
+      shell: bash

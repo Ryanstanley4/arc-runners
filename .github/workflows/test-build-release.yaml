@@ -1,0 +1,18 @@
+name: Test Build and Release
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-container:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Ubuntu-latest Container
+        uses: ./.github/actions/container-build
+        with:
+          image-name: ubuntu-latest
+          dockerfile: images/ubuntu-latest/Dockerfile
+          context: images/ubuntu-latest

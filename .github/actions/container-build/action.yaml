@@ -33,13 +33,13 @@ runs:
 
     - name: Build image with Podman
       run: |
-        REPO_OWNER_LC="${GITHUB_REPOSITORY_OWNER,,}"
-        podman build -f ${{ inputs.dockerfile }} -t ghcr.io/${REPO_OWNER_LC}/${{ inputs.image-name }}:latest ${{ inputs.context }}
+        REPO_LC="${GITHUB_REPOSITORY,,}"
+        podman build -f ${{ inputs.dockerfile }} -t ghcr.io/${REPO_LC}/${{ inputs.image-name }}:latest ${{ inputs.context }}
       shell: bash
 
     - name: Push image with Podman
       if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
       run: |
-        REPO_OWNER_LC="${GITHUB_REPOSITORY_OWNER,,}"
-        podman push ghcr.io/${REPO_OWNER_LC}/${{ inputs.image-name }}:latest
+        REPO_LC="${GITHUB_REPOSITORY,,}"
+        podman push ghcr.io/${REPO_LC}/${{ inputs.image-name }}:latest
       shell: bash

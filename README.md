@@ -23,14 +23,14 @@ helm upgrade --install "arc-runner-set" \
 
 ---
 
-## Included Tools & Versions
+## Included Tools
 
-The Ubuntu image includes the following tools and versions (see `images/ubuntu/Dockerfile`):
+The Ubuntu image includes the following tools (see `images/ubuntu/Dockerfile`):
 
-- **Base image:** Ubuntu 24.04
-- **GitHub Actions Runner:** v2.316.1
+- **Base image:** Ubuntu
+- **GitHub Actions Runner**
 - **Podman** (container runtime)
-- **Golang:** 1.22.4
+- **Golang**
 - **kubectl** (Kubernetes CLI)
 - **Helm** (Kubernetes package manager)
 - **curl, wget, git, unzip, jq, tar, gzip, lsb-release, build-essential, ca-certificates, software-properties-common, apt-transport-https, gnupg, libssl-dev**

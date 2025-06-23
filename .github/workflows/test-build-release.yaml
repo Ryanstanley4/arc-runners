@@ -19,3 +19,4 @@ jobs:
           image-name: ubuntu-latest
           dockerfile: images/ubuntu-latest/Dockerfile
           context: images/ubuntu-latest
+          github-token: ${{ secrets.GITHUB_TOKEN }}

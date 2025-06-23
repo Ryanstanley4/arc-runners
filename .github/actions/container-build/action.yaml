@@ -14,6 +14,9 @@ inputs:
     description: 'Build context'
     required: false
     default: '.'
+  github-token:
+    description: 'GitHub Token for registry login'
+    required: true
 
 runs:
   using: "composite"
@@ -26,7 +29,7 @@ runs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ inputs.github-token }}
 
     - name: Build image with Podman
       run: |

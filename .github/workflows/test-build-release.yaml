@@ -12,9 +12,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - image-name: ubuntu-latest
-            dockerfile: images/ubuntu-latest/Dockerfile
-            context: images/ubuntu-latest
+          - image-name: ubuntu
+            dockerfile: images/ubuntu/Dockerfile
+            context: images/ubuntu
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

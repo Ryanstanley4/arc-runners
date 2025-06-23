@@ -9,14 +9,20 @@ on:
 jobs:
   build-container:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - image-name: ubuntu-latest
+            dockerfile: images/ubuntu-latest/Dockerfile
+            context: images/ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build Ubuntu Container
+      - name: Build ${{ matrix.image-name }} Container
         uses: ./.github/actions/container-build
         with:
-          image-name: ubuntu
-          dockerfile: images/ubuntu/Dockerfile
-          context: images/ubuntu
+          image-name: ${{ matrix.image-name }}
+          dockerfile: ${{ matrix.dockerfile }}
+          context: ${{ matrix.context }}
           github-token: ${{ secrets.GITHUB_TOKEN }}

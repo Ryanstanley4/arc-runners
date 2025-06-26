@@ -18,7 +18,14 @@ template:
 or:
 ```sh
 helm upgrade --install "arc-runner-set" \
---set template.spec.containers[0].image='ghcr.io/ryanstanley4/arc-runners/ubuntu:latest'
+    --namespace "${NAMESPACE}" \
+    --set githubConfigSecret='arc-secret' \
+    --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
+    --set minRunners=1 \
+    --set runnerGroup="${GROUP_NAME}" \
+    --set image.repository=ghcr.io/ryanstanley4/arc-runners/ubuntu \
+    --set image.tag=latest \
+    oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
 ```
 
 ---

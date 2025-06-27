@@ -36,3 +36,4 @@ jobs:
           dockerfile: ${{ matrix.dockerfile }}
           context: ${{ matrix.context }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          image-tag: ${{ github.event.release.tag_name || 'devel' }}

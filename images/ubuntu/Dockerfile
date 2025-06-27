@@ -1,5 +1,4 @@
-# Base image: Ubuntu 24.04
-FROM ubuntu:24.04
+FROM ghcr.io/actions/actions-runner:latest
 
 # Metadata
 LABEL maintainer="ryanstanley4"
@@ -60,19 +59,3 @@ RUN type -p curl >/dev/null || apt-get install -y curl && \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
     apt-get update && \
     apt-get install -y gh
-
-# Create runner user
-RUN useradd -m ${RUNNER_USER}
-
-# Download and install GitHub Actions Runner
-WORKDIR /home/${RUNNER_USER}
-RUN curl -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz -o actions-runner.tar.gz && \
-    tar xzf actions-runner.tar.gz && \
-    rm actions-runner.tar.gz && \
-    chown -R ${RUNNER_USER}:${RUNNER_USER} /home/${RUNNER_USER}
-
-# Setup permissions
-USER ${RUNNER_USER}
-
-# Entrypoint
-ENTRYPOINT ["/home/runner/run.sh"]

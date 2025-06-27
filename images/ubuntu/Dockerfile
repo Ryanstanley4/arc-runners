@@ -9,6 +9,9 @@ LABEL org.opencontainers.image.source = "https://github.com/Ryanstanley4/arc-run
 ENV RUNNER_VERSION=2.316.1
 ENV RUNNER_USER=runner
 
+# Upgrade all packages for security and latest updates
+RUN apt-get upgrade -y && apt-get dist-upgrade -y && apt-get autoremove -y && apt-get clean
+
 # Install base tools
 RUN apt-get update && apt-get install -y \
     curl \
@@ -25,9 +28,6 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     build-essential \
     libssl-dev
-
-# Upgrade all packages for security and latest updates
-RUN apt-get upgrade -y && apt-get dist-upgrade -y && apt-get autoremove -y && apt-get clean
 
 # Install kubectl
 RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearmor -o /etc/apt/trusted.gpg.d/kubernetes.gpg && \

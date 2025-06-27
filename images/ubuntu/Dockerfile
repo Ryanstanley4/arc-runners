@@ -6,7 +6,7 @@ LABEL maintainer="ryanstanley4"
 LABEL org.opencontainers.image.source = "https://github.com/Ryanstanley4/arc-runners"
 
 # Set environment variables for runner
-ENV RUNNER_VERSION=2.316.1
+ENV RUNNER_VERSION=2.325.0
 ENV RUNNER_USER=runner
 
 # Upgrade all packages for security and latest updates

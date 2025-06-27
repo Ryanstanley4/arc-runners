@@ -38,9 +38,11 @@ The Ubuntu image includes the following tools (see `images/ubuntu/Dockerfile`):
 - **GitHub Actions Runner**
 - **Podman** (container runtime)
 - **Golang**
+- **GitHub CLI** (`gh`)
 - **kubectl** (Kubernetes CLI)
 - **Helm** (Kubernetes package manager)
 - **curl, wget, git, unzip, jq, tar, gzip, lsb-release, build-essential, ca-certificates, software-properties-common, apt-transport-https, gnupg, libssl-dev**
+- **System packages are upgraded for security and latest updates**
 
 ## Building the Image
 

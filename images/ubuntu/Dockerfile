@@ -26,6 +26,9 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     libssl-dev
 
+# Upgrade all packages for security and latest updates
+RUN apt-get upgrade -y && apt-get dist-upgrade -y && apt-get autoremove -y && apt-get clean
+
 # Install kubectl
 RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearmor -o /etc/apt/trusted.gpg.d/kubernetes.gpg && \
     echo "deb https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" | tee /etc/apt/sources.list.d/kubernetes.list && \
@@ -49,6 +52,14 @@ RUN curl -LO https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
     tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
     rm go${GO_VERSION}.linux-amd64.tar.gz
 ENV PATH="/usr/local/go/bin:${PATH}"
+
+# Install GitHub CLI
+RUN type -p curl >/dev/null || apt-get install -y curl && \
+    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
+    chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
+    apt-get update && \
+    apt-get install -y gh
 
 # Create runner user
 RUN useradd -m ${RUNNER_USER}

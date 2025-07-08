@@ -1,5 +1,5 @@
 # Base image: Ubuntu 22.04
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 # Metadata
 LABEL maintainer="ryanstanley4"

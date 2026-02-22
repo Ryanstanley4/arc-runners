@@ -23,8 +23,9 @@ helm upgrade --install "arc-runner-set" \
     --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
     --set minRunners=1 \
     --set runnerGroup="${GROUP_NAME}" \
-    --set image.repository=ghcr.io/ryanstanley4/arc-runners/ubuntu \
-    --set image.tag=latest \
+    --set template.spec.containers[0].name=runner \
+    --set template.spec.containers[0].image=ghcr.io/ryanstanley4/arc-runners/ubuntu:latest \
+    --set template.spec.containers[0].command[0]=/home/runner/run.sh \
     oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
 ```
 

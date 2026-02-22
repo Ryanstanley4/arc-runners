@@ -6,7 +6,7 @@ LABEL maintainer="ryanstanley4"
 LABEL org.opencontainers.image.source="https://github.com/Ryanstanley4/arc-runners"
 
 # Set environment variables for runner
-ENV RUNNER_VERSION=2.325.0
+ENV RUNNER_VERSION=2.331.0
 ENV RUNNER_USER=runner
 
 # Upgrade all packages for security and latest updates
@@ -27,7 +27,8 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https \
     gnupg \
     build-essential \
-    libssl-dev
+    libssl-dev \
+    gpg
 
 # Install kubectl
 RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearmor -o /etc/apt/trusted.gpg.d/kubernetes.gpg && \
@@ -36,8 +37,8 @@ RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --d
     apt-get install -y kubectl
 
 # Install helm
-RUN curl https://baltocdn.com/helm/signing.asc | gpg --dearmor -o /usr/share/keyrings/helm.gpg && \
-    echo "deb [signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" \
+RUN curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | gpg --dearmor | tee /usr/share/keyrings/helm.gpg > /dev/null && \
+    echo "deb [signed-by=/usr/share/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" \
     | tee /etc/apt/sources.list.d/helm-stable-debian.list && \
     apt-get update && \
     apt-get install -y helm
@@ -46,8 +47,8 @@ RUN curl https://baltocdn.com/helm/signing.asc | gpg --dearmor -o /usr/share/key
 RUN . /etc/os-release && \
     apt-get install -y podman
 
-# Install golang (1.22.x)
-ENV GO_VERSION=1.22.4
+# Install golang (1.26.x)
+ENV GO_VERSION=1.26.0
 RUN curl -LO https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
     tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
     rm go${GO_VERSION}.linux-amd64.tar.gz

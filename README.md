@@ -28,6 +28,18 @@ helm upgrade --install "arc-runner-set" \
     oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
 ```
 
+The key `githubConfigSecret` refers to the PAT taoken used to authenticate, this needs to be created as a secret within the same namespace **prior** to deployment. For refrence:
+
+```sh
+kubectl create secret generic arc-github-auth \
+  -n github-runners \
+  --from-literal=github_token='github_pat_..'
+```
+
+Note that this token needs the following org permissions:
+- Administration -> Read and write (Annoying it needs this.)
+- Self-hosted runners -> Read and write
+
 ---
 
 ## Included Tools

@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y \
     gpg
 
 # Install kubectl
-ENV KUBECTL_VERSION=v1.35.0
+ENV KUBECTL_VERSION=v1.35
 RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/${KUBECTL_VERSION}/deb/Release.key | gpg --dearmor -o /etc/apt/trusted.gpg.d/kubernetes.gpg && \
     echo "deb https://pkgs.k8s.io/core:/stable:/${KUBECTL_VERSION}/deb/ /" | tee /etc/apt/sources.list.d/kubernetes.list && \
     apt-get update && \

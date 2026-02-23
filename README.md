@@ -29,7 +29,7 @@ helm upgrade --install "arc-runner-set" \
     oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
 ```
 
-The key `githubConfigSecret` refers to the PAT taoken used to authenticate, this needs to be created as a secret within the same namespace **prior** to deployment. For refrence:
+The key `githubConfigSecret` refers to the PAT token used to authenticate, this needs to be created as a secret within the same namespace **prior** to deployment. For reference:
 
 ```sh
 kubectl create secret generic arc-github-auth \
@@ -42,6 +42,77 @@ Note that this token needs the following org permissions:
 - Self-hosted runners -> Read and write
 
 ---
+
+## Runner Permissions
+Once the runners are online depending on your use case it maybe neceisserry to give these permissions to your cluster. This can be done either by giving the runners full admin permissions (not ideal long term), or by creating a cluster role and binding this to the runners.
+
+Admin:
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: arc-runner-set-cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: arc-runner-set-gha-rs-no-permission
+    namespace: github-runners
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+```
+
+role binding:
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: arc-runner-deployer
+rules:
+  # Cluster-scoped namespace creation
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "list", "watch", "create", "delete"]
+
+  # Namespaced core resources
+  - apiGroups: [""]
+    resources: ["pods", "services", "configmaps", "secrets", "serviceaccounts"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+  # Workloads
+  - apiGroups: ["apps"]
+    resources: ["deployments", "statefulsets", "daemonsets", "replicasets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+  # Batch jobs
+  - apiGroups: ["batch"]
+    resources: ["jobs", "cronjobs"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+  # Ingress (adjust for your cluster if using traefik CRDs instead)
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses", "networkpolicies"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+  # RBAC if your workflows create roles/bindings in target namespaces
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["roles", "rolebindings"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: arc-runner-deployer-binding
+subjects:
+  - kind: ServiceAccount
+    name: arc-runner-set-gha-rs-no-permission
+    namespace: github-runners
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: arc-runner-deployer
+```
+
 
 ## Included Tools
 

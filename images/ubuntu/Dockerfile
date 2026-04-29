@@ -1,12 +1,12 @@
 # Base image: Ubuntu 22.04
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 
 # Metadata
 LABEL maintainer="ryanstanley4"
 LABEL org.opencontainers.image.source="https://github.com/Ryanstanley4/arc-runners"
 
 # Set environment variables for runner
-ENV RUNNER_VERSION=2.331.0
+ENV RUNNER_VERSION=2.334.0
 ENV RUNNER_USER=runner
 
 # Upgrade all packages for security and latest updates

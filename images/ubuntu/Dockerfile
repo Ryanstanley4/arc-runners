@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     build-essential \
     libssl-dev \
-    ibicu-dev \
+    libicu-dev \
     locales \
     gpg
 

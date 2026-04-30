@@ -28,6 +28,8 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     build-essential \
     libssl-dev \
+    ibicu-dev \
+    locales \
     gpg
 
 # Install kubectl
@@ -71,6 +73,7 @@ WORKDIR /home/${RUNNER_USER}
 RUN curl -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz -o actions-runner.tar.gz && \
     tar xzf actions-runner.tar.gz && \
     rm actions-runner.tar.gz && \
+    ./bin/installdependencies.sh && \
     chown -R ${RUNNER_USER}:${RUNNER_USER} /home/${RUNNER_USER}
 
 # Setup permissions
